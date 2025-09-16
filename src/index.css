@@ -14,16 +14,16 @@
     z-index: 0 !important;
 }
 
-/* Enhanced Blob animation for hero section */
+/* Enhanced Blob animation for hero section - Much subtler */
 @keyframes blob {
   0% {
     transform: translate(0px, 0px) scale(1) rotate(0deg);
   }
   33% {
-    transform: translate(30px, -50px) scale(1.1) rotate(120deg);
+    transform: translate(20px, -30px) scale(1.05) rotate(120deg);
   }
   66% {
-    transform: translate(-20px, 20px) scale(0.9) rotate(240deg);
+    transform: translate(-15px, 15px) scale(0.95) rotate(240deg);
   }
   100% {
     transform: translate(0px, 0px) scale(1) rotate(360deg);

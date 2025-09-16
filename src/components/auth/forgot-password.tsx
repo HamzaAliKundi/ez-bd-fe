@@ -34,36 +34,36 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gray-50">
       <LandingNavbar />
       
       {/* Animated Background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-green-500 rounded-full mix-blend-screen filter blur-xl opacity-30 animate-blob"></div>
-        <div className="absolute top-40 right-10 w-72 h-72 bg-green-400 rounded-full mix-blend-screen filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-green-600 rounded-full mix-blend-screen filter blur-xl opacity-25 animate-blob animation-delay-4000"></div>
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-32 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-56 h-56 bg-teal-500 rounded-full mix-blend-screen filter blur-xl opacity-8 animate-blob"></div>
+        <div className="absolute top-1/2 right-10 w-56 h-56 bg-teal-400 rounded-full mix-blend-screen filter blur-xl opacity-6 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-32 left-10 w-56 h-56 bg-teal-600 rounded-full mix-blend-screen filter blur-xl opacity-10 animate-blob animation-delay-4000"></div>
       </div>
 
       <div className="flex items-center justify-center px-4 py-12 relative">
         <div className="max-w-md w-full relative">
-          <div className="bg-gray-900 rounded-2xl shadow-2xl p-8 border border-gray-800 animate-slide-up">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20 animate-slide-up">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-white mb-2 animate-slide-up animate-delay-100">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2 animate-slide-up animate-delay-100">
                 Forgot your password?
               </h2>
-              <p className="text-gray-300 animate-slide-up animate-delay-200">
+              <p className="text-gray-600 animate-slide-up animate-delay-200">
                 Enter your email address and we'll send you a link to reset your password.
               </p>
             </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="animate-slide-up animate-delay-300">
-            <label className="block text-gray-300 text-sm font-medium mb-2">
+            <label className="block text-gray-700 text-sm font-medium mb-2">
               Email Address
             </label>
             <input
               type="email"
-              className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-white placeholder-gray-500 transition-all duration-200"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-900 placeholder-gray-500 transition-all duration-200"
               placeholder="Enter your email"
               {...register("email", {
                 required: "Email is required",
@@ -83,7 +83,7 @@ const ForgotPassword = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-lg transition-all duration-300 disabled:opacity-50 font-medium btn-hover-glow animate-float animate-slide-up animate-delay-400"
+            className="w-full bg-teal-600 hover:bg-teal-500 text-white py-3 rounded-lg transition-all duration-300 disabled:opacity-50 font-medium btn-hover-glow animate-float animate-slide-up animate-delay-400"
           >
             {isLoading ? (
               <div className="flex items-center justify-center">
@@ -101,7 +101,7 @@ const ForgotPassword = () => {
           <div className="text-center mt-6 animate-slide-up animate-delay-500">
             <Link
               to="/login"
-              className="inline-flex items-center text-sm text-green-400 hover:text-green-300 transition-colors font-medium"
+              className="inline-flex items-center text-sm text-teal-600 hover:text-teal-500 transition-colors font-medium"
             >
               <FiArrowLeft className="mr-2" />
               Back to login

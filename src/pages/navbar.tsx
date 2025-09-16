@@ -39,7 +39,7 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }: NavbarProps) {
           {!isSidebarOpen && (
             <button
               onClick={() => setIsLogoutModalOpen(true)}
-              className="hidden md:flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-all duration-200"
+              className="hidden md:flex items-center gap-2 text-gray-600 hover:text-teal-600 transition-all duration-200"
             >
               <FiLogOut className="w-5 h-5" />
               <span className="text-[15px]">Logout</span>
@@ -49,7 +49,7 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }: NavbarProps) {
           {/* Mobile Menu Button */}
           <button 
             onClick={toggleSidebar} 
-            className="md:hidden text-gray-600 hover:text-blue-600 transition-all duration-200 p-2 rounded-lg hover:bg-gray-50"
+            className="md:hidden text-gray-600 hover:text-teal-600 transition-all duration-200 p-2 rounded-lg hover:bg-gray-50"
           >
             {isSidebarOpen ? <FiX className="w-6 h-6" /> : <FiMenu className="w-6 h-6" />}
           </button>
@@ -86,7 +86,7 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }: NavbarProps) {
               </button>
               <button
                 onClick={handleLogout}
-                className="flex-1 h-12 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 flex items-center justify-center disabled:opacity-50"
+                className="flex-1 h-12 rounded-lg bg-teal-600 text-white hover:bg-teal-700 transition-all duration-200 flex items-center justify-center disabled:opacity-50"
                 disabled={isLoggingOut}
               >
                 {isLoggingOut ? (

@@ -54,8 +54,8 @@ const SideNav = ({ isSidebarOpen, toggleSidebar }: SideNavProps) => {
                         const isPathActive = location.pathname.includes(pathWithoutSlash.replace('s', ''));
                         return `flex items-center gap-3 px-4 py-3 text-[15px] rounded-lg ${
                           isActive || isPathActive 
-                            ? "bg-blue-50 text-blue-600 font-medium" 
-                            : "text-gray-600 hover:bg-gray-50 hover:text-blue-600"
+                            ? "bg-teal-50 text-teal-600 font-medium" 
+                            : "text-gray-600 hover:bg-gray-50 hover:text-teal-600"
                         } transition-all duration-200`;
                       }}
                     >
@@ -72,7 +72,7 @@ const SideNav = ({ isSidebarOpen, toggleSidebar }: SideNavProps) => {
             <div className="p-4 border-t border-gray-100">
               <button
                 onClick={() => setIsLogoutModalOpen(true)}
-                className="w-full flex items-center gap-3 px-4 py-3 text-[15px] text-gray-600 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-all duration-200"
+                className="w-full flex items-center gap-3 px-4 py-3 text-[15px] text-gray-600 hover:bg-gray-50 hover:text-teal-600 rounded-lg transition-all duration-200"
               >
                 <FiLogOut className="w-5 h-5" />
                 <span>Logout</span>
@@ -112,7 +112,7 @@ const SideNav = ({ isSidebarOpen, toggleSidebar }: SideNavProps) => {
               </button>
               <button
                 onClick={handleLogout}
-                className="flex-1 h-12 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 flex items-center justify-center disabled:opacity-50"
+                className="flex-1 h-12 rounded-lg bg-teal-600 text-white hover:bg-teal-700 transition-all duration-200 flex items-center justify-center disabled:opacity-50"
                 disabled={isLoggingOut}
               >
                 {isLoggingOut ? (
