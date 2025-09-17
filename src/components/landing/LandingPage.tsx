@@ -415,7 +415,7 @@ const LandingPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-1">
               <div className="flex items-center mb-6">
-                {/* <img src="/logo.svg" alt="Ez-BD" className="h-10 w-auto" /> */}
+                {/* <img src="/ezbd.png" alt="Ez-BD" className="h-10 w-auto" /> */}
                 <span className="ml-3 text-2xl font-bold">Ez-BD</span>
               </div>
               <p className="text-gray-400 mb-6 max-w-md leading-relaxed">

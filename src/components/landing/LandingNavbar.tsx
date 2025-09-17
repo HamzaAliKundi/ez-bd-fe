@@ -40,8 +40,7 @@ const LandingNavbar = () => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
-              {/* <img src="/logo.svg" alt="Easy Bidder" className="h-8 w-auto" /> */}
-              <span className="ml-2 text-xl font-bold text-gray-900">Ez-BD</span>
+              <img src="/ezbd.png" alt="Easy Bidder" className="h-24 w-auto" />
             </Link>
           </div>
 

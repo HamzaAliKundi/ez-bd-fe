@@ -25,11 +25,11 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }: NavbarProps) {
 
   return (
     <>
-      <nav className="bg-white border-b border-gray-100 py-4 h-[80px] w-full flex items-center z-30 px-6 md:px-8 justify-between relative">
+      <nav className="bg-white border-b border-gray-100 py-4 h-[80px] w-full flex items-center z-30 md:px-8 justify-between relative">
         {/* Left Logo */}
         <div className="flex items-center space-x-2">
           <Link to="/" className="flex items-center gap-3">
-            <img src="/logo.svg" alt="DragSpace Logo" className="h-10" />
+            <img src="/ezbd.png" alt="DragSpace Logo" className="h-16 md:h-24" />
           </Link>
         </div>
 

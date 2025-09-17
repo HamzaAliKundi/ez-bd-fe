@@ -15,7 +15,7 @@ const Layout = () => {
         <SideNav isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
         <main
-          className={`flex-1 md:p-10 p-2 ${
+          className={`flex-1 md:p-10 p-4 ${
             isSidebarOpen
               ? "opacity-50 pointer-events-none md:opacity-100 md:pointer-events-auto"
               : ""
