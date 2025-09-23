@@ -4,12 +4,7 @@ import { IoMdClose } from "react-icons/io";
 import { FiUser, FiMessageSquare, FiStar, FiCalendar, FiTool, FiSettings, FiLogOut } from "react-icons/fi";
 
 const navItems = [
-  { name: "My Profile", path: "/profile", icon: FiUser },
-  { name: "Messages", path: "/messages", icon: FiMessageSquare },
-  { name: "Review", path: "/review", icon: FiStar },
-  { name: "Events", path: "/events", icon: FiCalendar },
-  { name: "Helpful Tools", path: "/tools", icon: FiTool },
-  { name: "Settings", path: "/settings", icon: FiSettings }
+  { name: "Portfolio", path: "/portfolio", icon: FiMessageSquare }
 ];
 
 interface SideNavProps {

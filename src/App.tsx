@@ -9,7 +9,6 @@ import ResetPassword from "./components/auth/reset-password";
 import ForgotPassword from "./components/auth/forgot-password";
 import PasswordResetEmailSent from "./components/auth/password-reset-email-sent";
 import PasswordChangedSuccess from "./components/auth/password-changed-success";
-import HomePage from "./pages/home";
 import Login from "./components/auth";
 import EmailVerificationSent from "./components/auth/email-verification-sent";
 import EmailVerification from "./components/auth/email-verification";
@@ -17,6 +16,8 @@ import LandingPage from "./components/landing/LandingPage";
 import HowItWorks from "./components/pages/HowItWorks";
 import Pricing from "./components/pages/Pricing";
 import Contact from "./components/pages/Contact";
+import PortfolioPage from "./pages/dashboard/portfolio";
+import NotFound from "./pages/notFound";
 
 function App() {
   return (
@@ -45,9 +46,12 @@ function App() {
 
         <Route element={<ProtectedRoutes />}>
           <Route path="/" element={<Layout />}>
-            <Route path="/home" element={<HomePage />} />
+            <Route path="/portfolio" element={<PortfolioPage />} />
           </Route>
         </Route>
+
+        {/* Catch-all route for 404 */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
