@@ -31,12 +31,12 @@ const SideNav = ({ isSidebarOpen, toggleSidebar }: SideNavProps) => {
   return (
     <>
       <aside
-        className={`fixed inset-y-0 left-0 z-20 w-[280px] bg-white border-r border-gray-100 transform ${
+        className={`fixed top-[80px] left-0 bottom-0 z-20 w-[280px] bg-white border-r border-gray-100 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-all duration-300 ease-in-out md:translate-x-0 md:relative`}
+        } transition-all duration-300 ease-in-out md:translate-x-0`}
       >
-        <nav className="h-full flex flex-col">
-          <div className="flex-1 pt-28 md:pt-8 lg:pt-8">
+        <nav className="h-full flex flex-col overflow-hidden">
+          <div className="flex-1 overflow-y-auto py-8">
             <ul className="space-y-1 px-4">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -63,17 +63,16 @@ const SideNav = ({ isSidebarOpen, toggleSidebar }: SideNavProps) => {
             </ul>
           </div>
 
-          {isSidebarOpen && (
-            <div className="p-4 border-t border-gray-100">
-              <button
-                onClick={() => setIsLogoutModalOpen(true)}
-                className="w-full flex items-center gap-3 px-4 py-3 text-[15px] text-gray-600 hover:bg-gray-50 hover:text-teal-600 rounded-lg transition-all duration-200"
-              >
-                <FiLogOut className="w-5 h-5" />
-                <span>Logout</span>
-              </button>
-            </div>
-          )}
+          {/* Logout Button - Always visible on mobile when sidebar is open */}
+          <div className="md:hidden p-4 border-t border-gray-100">
+            <button
+              onClick={() => setIsLogoutModalOpen(true)}
+              className="w-full flex items-center gap-3 px-4 py-3 text-[15px] text-gray-600 hover:bg-gray-50 hover:text-teal-600 rounded-lg transition-all duration-200"
+            >
+              <FiLogOut className="w-5 h-5" />
+              <span>Logout</span>
+            </button>
+          </div>
         </nav>
       </aside>
 

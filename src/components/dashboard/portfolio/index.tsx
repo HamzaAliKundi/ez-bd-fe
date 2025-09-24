@@ -1,88 +1,117 @@
 import React, { useState } from 'react'
-import { FiPlus, FiGithub, FiExternalLink, FiX, FiCode, FiFolder } from 'react-icons/fi'
-
-interface PortfolioItem {
-  id: string
-  title: string
-  githubLink: string
-  description: string
-  techStack: string[]
-}
+import { FiPlus, FiGithub, FiExternalLink, FiFolder, FiEdit, FiTrash2 } from 'react-icons/fi'
+import { 
+  useGetPortfolioQuery, 
+  useDeletePortfolioMutation,
+  PortfolioItem
+} from '../../../apis/portfolio'
+import Pagination from '../../../common/Pagination'
+import DeleteConfirmationModal from '../../../common/DeleteConfirmationModal'
+import AddPortfolioModal from './addPortfolioModal'
+import toast from 'react-hot-toast'
+import SearchInput from '../../../common/searchInput'
 
 const Portfolio = () => {
-  const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [formData, setFormData] = useState({
-    title: '',
-    githubLink: '',
-    description: '',
-    techStack: [] as string[]
+  const [isEditing, setIsEditing] = useState(false)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [itemToDelete, setItemToDelete] = useState<{ id: string; title: string } | null>(null)
+  const [editingItem, setEditingItem] = useState<PortfolioItem | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
+
+  // Debounce search term
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm)
+      setCurrentPage(1) // Reset to first page when searching
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [searchTerm])
+
+  // API Hooks
+  const { data: portfolioData, isLoading, error, refetch } = useGetPortfolioQuery({ 
+    page: currentPage, 
+    limit: 9,
+    search: debouncedSearchTerm
   })
-  const [currentTag, setCurrentTag] = useState('')
+  const [deletePortfolio, { isLoading: isDeleting }] = useDeletePortfolioMutation()
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
-  }
-
-  const handleTagKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && currentTag.trim()) {
-      e.preventDefault()
-      if (!formData.techStack.includes(currentTag.trim())) {
-        setFormData(prev => ({
-          ...prev,
-          techStack: [...prev.techStack, currentTag.trim()]
-        }))
-      }
-      setCurrentTag('')
-    }
-  }
-
-  const removeTag = (tagToRemove: string) => {
-    setFormData(prev => ({
-      ...prev,
-      techStack: prev.techStack.filter(tag => tag !== tagToRemove)
-    }))
-  }
-
-  const handleSave = () => {
-    if (formData.title && formData.description) {
-      const newItem: PortfolioItem = {
-        id: Date.now().toString(),
-        title: formData.title,
-        githubLink: formData.githubLink,
-        description: formData.description,
-        techStack: formData.techStack
-      }
-      
-      setPortfolioItems(prev => [...prev, newItem])
-      setFormData({
-        title: '',
-        githubLink: '',
-        description: '',
-        techStack: []
-      })
-      setCurrentTag('')
-      setIsModalOpen(false)
-    }
+  // Modal Handlers
+  const handleEdit = (item: PortfolioItem) => {
+    setEditingItem(item)
+    setEditingId(item._id)
+    setIsEditing(true)
+    setIsModalOpen(true)
   }
 
   const closeModal = () => {
     setIsModalOpen(false)
-    setFormData({
-      title: '',
-      githubLink: '',
-      description: '',
-      techStack: []
-    })
-    setCurrentTag('')
+    setIsEditing(false)
+    setEditingId(null)
+    setEditingItem(null)
+  }
+
+  const handleDeleteClick = (item: PortfolioItem) => {
+    setItemToDelete({ id: item._id, title: item.title })
+    setIsDeleteModalOpen(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!itemToDelete) return
+    
+    try {
+      await deletePortfolio(itemToDelete.id).unwrap()
+      toast.success('Portfolio deleted successfully!')
+      setIsDeleteModalOpen(false)
+      setItemToDelete(null)
+    } catch (error: any) {
+      toast.error(error?.data?.message || 'Failed to delete portfolio')
+    }
+  }
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false)
+    setItemToDelete(null)
+  }
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value)
+  }
+
+  const handleSearchClear = () => {
+    setSearchTerm('')
+    setDebouncedSearchTerm('')
+    setCurrentPage(1)
+  }
+
+  // Loading and Error States
+  if (error) {
+    return (
+      <div className="min-h-screen p-6 flex items-center justify-center">
+        <div className="text-center">
+          <h3 className="text-xl font-semibold text-red-600 mb-2">Error Loading Portfolio</h3>
+          <p className="text-gray-600 mb-4">Something went wrong while fetching your portfolio</p>
+          <button 
+            onClick={() => refetch()}
+            className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="w-full">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -101,197 +130,200 @@ const Portfolio = () => {
               </button>
             </div>
           </div>
+
+          {/* Search and Stats */}
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <div className="w-full sm:w-96">
+              <SearchInput
+                value={searchTerm}
+                onChange={handleSearchChange}
+                onClear={handleSearchClear}
+                placeholder="Search projects by title, description, or tech stack..."
+                disabled={isLoading}
+              />
+            </div>
+            {portfolioData && (
+              <div className="text-sm text-gray-500 whitespace-nowrap">
+                {debouncedSearchTerm ? (
+                  <>Found {portfolioData.totalCount} result{portfolioData.totalCount !== 1 ? 's' : ''} for "{debouncedSearchTerm}"</>
+                ) : (
+                  <>Total: {portfolioData.totalCount} project{portfolioData.totalCount !== 1 ? 's' : ''}</>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Portfolio Grid */}
-        {portfolioItems.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FiFolder className="w-12 h-12 text-gray-400" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No projects yet</h3>
-            <p className="text-gray-600 mb-6">Start building your portfolio by adding your first project</p>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center gap-2"
-            >
-              <FiPlus className="w-5 h-5" />
-              Add Your First Project
-            </button>
-          </div>
-        ) : (
+        {/* Loading State */}
+        {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {portfolioItems.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 hover:border-teal-200 transform hover:-translate-y-1"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <h3 className="text-xl font-semibold text-gray-900 line-clamp-2">{item.title}</h3>
-                  {item.githubLink && (
-                    <a
-                      href={item.githubLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-teal-600 transition-colors"
-                    >
-                      <FiGithub className="w-5 h-5" />
-                    </a>
-                  )}
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 animate-pulse">
+                <div className="h-6 bg-gray-200 rounded mb-4"></div>
+                <div className="h-20 bg-gray-200 rounded mb-4"></div>
+                <div className="flex gap-2 mb-4">
+                  <div className="h-6 w-16 bg-gray-200 rounded-full"></div>
+                  <div className="h-6 w-20 bg-gray-200 rounded-full"></div>
                 </div>
-                
-                <p className="text-gray-600 mb-4 line-clamp-3">{item.description}</p>
-                
-                {item.techStack.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {item.techStack.map((tech, index) => (
-                      <span
-                        key={index}
-                        className="bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-sm font-medium"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                
-                {item.githubLink && (
-                  <a
-                    href={item.githubLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-medium transition-colors"
-                  >
-                    <FiExternalLink className="w-4 h-4" />
-                    View Project
-                  </a>
-                )}
+                <div className="h-4 w-24 bg-gray-200 rounded"></div>
               </div>
             ))}
           </div>
-        )}
-
-        {/* Modal */}
-        {isModalOpen && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-              <div className="p-6 border-b border-gray-100">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-semibold text-gray-900">Add New Project</h2>
-                  <button
-                    onClick={closeModal}
-                    className="text-gray-400 hover:text-gray-600 rounded-full p-2 transition-colors"
-                  >
-                    <FiX className="w-5 h-5" />
-                  </button>
+        ) : (
+          <>
+            {/* Portfolio Grid */}
+            {portfolioData?.data.length === 0 ? (
+              <div className="text-center py-16">
+                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <FiFolder className="w-12 h-12 text-gray-400" />
                 </div>
+                {debouncedSearchTerm ? (
+                  <>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">No results found</h3>
+                    <p className="text-gray-600 mb-6">
+                      No projects match your search for "{debouncedSearchTerm}". Try different keywords or{' '}
+                      <button 
+                        onClick={handleSearchClear}
+                        className="text-teal-600 hover:text-teal-700 underline"
+                      >
+                        clear the search
+                      </button>
+                      .
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">No projects yet</h3>
+                    <p className="text-gray-600 mb-6">Start building your portfolio by adding your first project</p>
+                    <button
+                      onClick={() => setIsModalOpen(true)}
+                      className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center gap-2"
+                    >
+                      <FiPlus className="w-5 h-5" />
+                      Add Your First Project
+                    </button>
+                  </>
+                )}
               </div>
-
-              <div className="p-6 space-y-6">
-                {/* Project Title */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Project Name/Title *
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    placeholder="Enter project name"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
-                  />
-                </div>
-
-                {/* GitHub Link */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    GitHub Link
-                  </label>
-                  <div className="relative">
-                    <FiGithub className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <input
-                      type="url"
-                      name="githubLink"
-                      value={formData.githubLink}
-                      onChange={handleInputChange}
-                      placeholder="https://github.com/username/project"
-                      className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
-                    />
-                  </div>
-                </div>
-
-                {/* Description */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Description *
-                  </label>
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    placeholder="Describe your project, what it does, and what makes it special..."
-                    rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors resize-none"
-                  />
-                </div>
-
-                {/* Tech Stack */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Tech Stack
-                  </label>
-                  <div className="relative">
-                    <FiCode className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <input
-                      type="text"
-                      value={currentTag}
-                      onChange={(e) => setCurrentTag(e.target.value)}
-                      onKeyPress={handleTagKeyPress}
-                      placeholder="Type technology and press Enter (e.g., React, Node.js)"
-                      className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
-                    />
-                  </div>
-                  
-                  {formData.techStack.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-3">
-                      {formData.techStack.map((tech, index) => (
-                        <span
-                          key={index}
-                          className="bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2"
-                        >
-                          {tech}
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {portfolioData?.data.map((item) => (
+                    <div
+                      key={item._id}
+                      className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 hover:border-teal-200 transform hover:-translate-y-1 group"
+                    >
+                      {/* Action Buttons */}
+                      <div className="flex items-start justify-between mb-4">
+                        <h3 className="text-xl font-semibold text-gray-900 flex-1 mr-2" title={item.title}>
+                          {item.title.length > 30 ? `${item.title.substring(0, 30)}...` : item.title}
+                        </h3>
+                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
-                            onClick={() => removeTag(tech)}
-                            className="text-teal-600 hover:text-teal-800 transition-colors"
+                            onClick={() => handleEdit(item)}
+                            className="text-gray-400 hover:text-blue-600 transition-colors p-1"
+                            title="Edit"
                           >
-                            <FiX className="w-3 h-3" />
+                            <FiEdit className="w-4 h-4" />
                           </button>
-                        </span>
-                      ))}
+                          <button
+                            onClick={() => handleDeleteClick(item)}
+                            className="text-gray-400 hover:text-red-600 transition-colors p-1"
+                            title="Delete"
+                            disabled={isDeleting}
+                          >
+                            <FiTrash2 className="w-4 h-4" />
+                          </button>
+                          {item.githubLink && (
+                            <a
+                              href={item.githubLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-gray-400 hover:text-teal-600 transition-colors p-1"
+                              title="View on GitHub"
+                            >
+                              <FiGithub className="w-4 h-4" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <p className="text-gray-600 mb-4" title={item.description}>
+                        {item.description.length > 30 ? `${item.description.substring(0, 30)}...` : item.description}
+                      </p>
+                      
+                      {item.techStack.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {item.techStack.map((tech, index) => (
+                            <span
+                              key={index}
+                              className="bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-sm font-medium"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      
+                      {item.githubLink && (
+                        <a
+                          href={item.githubLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-medium transition-colors"
+                        >
+                          <FiExternalLink className="w-4 h-4" />
+                          View Project
+                        </a>
+                      )}
+                      
+                      <div className="text-xs text-gray-400 mt-4">
+                        Created: {new Date(item.createdAt).toLocaleDateString('en-US', { 
+                          month: 'short', 
+                          day: 'numeric', 
+                          year: 'numeric' 
+                        })}
+                      </div>
                     </div>
-                  )}
+                  ))}
                 </div>
-              </div>
 
-              <div className="p-6 border-t border-gray-100 flex gap-4">
-                <button
-                  onClick={closeModal}
-                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSave}
-                  disabled={!formData.title || !formData.description}
-                  className="flex-1 px-6 py-3 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors font-medium"
-                >
-                  Save Project
-                </button>
-              </div>
-            </div>
-          </div>
+                {/* Pagination */}
+                {portfolioData && portfolioData.totalPages > 1 && (
+                  <div className="mt-12">
+                    <Pagination
+                      currentPage={portfolioData.currentPage}
+                      totalPages={portfolioData.totalPages}
+                      onPageChange={handlePageChange}
+                      isLoading={isLoading}
+                      totalItems={portfolioData.totalCount}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </>
         )}
+
+        {/* Add/Edit Portfolio Modal */}
+        <AddPortfolioModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          isEditing={isEditing}
+          editingItem={editingItem}
+        />
+
+        {/* Delete Confirmation Modal */}
+        <DeleteConfirmationModal
+          isOpen={isDeleteModalOpen}
+          onClose={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+          title="Delete Portfolio Item"
+          itemName={itemToDelete?.title}
+          isLoading={isDeleting}
+          confirmText="Delete Project"
+          cancelText="Keep Project"
+        />
       </div>
     </div>
   )
