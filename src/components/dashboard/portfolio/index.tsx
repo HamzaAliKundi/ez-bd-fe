@@ -9,7 +9,7 @@ import Pagination from '../../../common/Pagination'
 import DeleteConfirmationModal from '../../../common/DeleteConfirmationModal'
 import AddPortfolioModal from './addPortfolioModal'
 import toast from 'react-hot-toast'
-import SearchInput from '../../../common/searchInput'
+import SearchInput from '../../../common/SearchInput'
 
 const Portfolio = () => {
   const [currentPage, setCurrentPage] = useState(1)
