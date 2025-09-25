@@ -9,6 +9,7 @@ import Pagination from '../../../common/Pagination'
 import DeleteConfirmationModal from '../../../common/DeleteConfirmationModal'
 import AddPortfolioModal from './addPortfolioModal'
 import PortfolioSkeleton from './PortfolioSkeleton'
+import PortfolioInstructions from './PortfolioInstructions'
 import toast from 'react-hot-toast'
 import SearchInput from '../../../common/SearchInput'
 
@@ -292,6 +293,18 @@ const Portfolio = () => {
               </>
             )}
           </>
+        )}
+
+        {/* Special Instructions - Only show when there are projects */}
+        {!isLoading && portfolioData && portfolioData.data.length > 0 && (
+          <PortfolioInstructions
+            initialInstructions=""
+            onSave={(instructions) => {
+              console.log('Saving instructions:', instructions)
+              // TODO: Implement API call to save instructions
+            }}
+            isLoading={false}
+          />
         )}
 
         {/* Add/Edit Portfolio Modal */}
