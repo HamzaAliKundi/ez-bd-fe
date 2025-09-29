@@ -1,21 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useGetInstructionsQuery, useCreateInstructionsMutation } from '../../../apis/instructions'
+import toast from 'react-hot-toast'
 
 interface PortfolioInstructionsProps {
-  initialInstructions?: string
-  onSave?: (instructions: string) => void
-  isLoading?: boolean
+  // Remove props as we'll get data from API
 }
 
-const PortfolioInstructions: React.FC<PortfolioInstructionsProps> = ({ 
-  initialInstructions = '',
-  onSave,
-  isLoading = false
-}) => {
-  const [instructions, setInstructions] = useState(initialInstructions)
+const PortfolioInstructions: React.FC<PortfolioInstructionsProps> = () => {
+  const [instructions, setInstructions] = useState('')
+  
+  // API Hooks
+  const { data: instructionsData, isLoading: isFetching, error } = useGetInstructionsQuery()
+  const [createInstructions, { isLoading: isSaving }] = useCreateInstructionsMutation()
 
-  const handleSave = () => {
-    if (onSave) {
-      onSave(instructions)
+  // Update local state when data is fetched
+  useEffect(() => {
+    if (instructionsData?.data?.instructions) {
+      setInstructions(instructionsData.data.instructions)
+    }
+  }, [instructionsData])
+
+  const handleSave = async () => {
+    try {
+      await createInstructions({ instructions }).unwrap()
+      toast.success('Instructions saved successfully!')
+    } catch (error: any) {
+      toast.error(error?.data?.message || 'Failed to save instructions')
     }
   }
 
@@ -52,10 +62,10 @@ const PortfolioInstructions: React.FC<PortfolioInstructionsProps> = ({
             value={instructions}
             onChange={handleChange}
             placeholder="Add special instructions for your portfolio (e.g., preferred project types, availability, special skills, etc.)"
-            className="w-full p-3 sm:p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors resize-none text-sm sm:text-base"
+            className="w-full p-3 sm:p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none transition-colors resize-none text-sm sm:text-base"
             rows={4}
             maxLength={500}
-            disabled={isLoading}
+            disabled={isFetching || isSaving}
           />
           <div className="absolute bottom-3 right-3 text-xs text-gray-400">
             {instructions.length}/500
@@ -72,10 +82,10 @@ const PortfolioInstructions: React.FC<PortfolioInstructionsProps> = ({
           </div>
           <button 
             onClick={handleSave}
-            disabled={isLoading}
+            disabled={isFetching || isSaving}
             className="bg-teal-600 hover:bg-teal-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors order-1 sm:order-2 w-full sm:w-auto"
           >
-            {isLoading ? 'Saving...' : 'Save Instructions'}
+            {isSaving ? 'Saving...' : 'Save Instructions'}
           </button>
         </div>
       </div>

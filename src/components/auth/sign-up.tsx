@@ -129,7 +129,7 @@ const Signup = () => {
                   </label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-900 placeholder-gray-500 transition-all duration-200 box-border"
+                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none text-gray-900 placeholder-gray-500 transition-all duration-200 box-border"
                     placeholder="Enter your full name"
                     {...register("name", { required: "Name is required" })}
                   />
@@ -147,7 +147,7 @@ const Signup = () => {
                   </label>
                   <input
                     type="email"
-                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-900 placeholder-gray-500 transition-all duration-200 box-border"
+                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none text-gray-900 placeholder-gray-500 transition-all duration-200 box-border"
                     placeholder="Enter your email"
                     {...register("email", {
                       required: "Email is required",
@@ -172,7 +172,7 @@ const Signup = () => {
                   <div className="relative w-full">
                     <input
                       type={passwordVisible ? "text" : "password"}
-                      className="w-full px-4 py-3 pr-12 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-900 placeholder-gray-500 transition-all duration-200 box-border"
+                      className="w-full px-4 py-3 pr-12 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none text-gray-900 placeholder-gray-500 transition-all duration-200 box-border"
                       placeholder="Enter your password (8+ characters)"
                       {...register("password", {
                         required: "Password is required",

@@ -76,7 +76,7 @@ const ResetPassword = () => {
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-900 placeholder-gray-500 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent focus:outline-none text-gray-900 placeholder-gray-500 transition-all duration-200"
                   placeholder="Enter new password"
                   {...register("password", {
                     required: "Password is required",
@@ -108,7 +108,7 @@ const ResetPassword = () => {
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-900 placeholder-gray-500 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent focus:outline-none text-gray-900 placeholder-gray-500 transition-all duration-200"
                   placeholder="Confirm new password"
                   {...register("confirmPassword", {
                     required: "Please confirm your password",

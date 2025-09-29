@@ -68,7 +68,7 @@ const Login = () => {
                 <input
                   type="email"
                   defaultValue="hamza.alee83@gmail.com"
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-900 placeholder-gray-500 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none text-gray-900 placeholder-gray-500 transition-all duration-200"
                   placeholder="Enter your email"
                   {...register("email", { 
                     required: true,
@@ -89,7 +89,7 @@ const Login = () => {
                   <input
                     type={passwordVisible ? "text" : "password"}
                     defaultValue="qwerty123"
-                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-900 placeholder-gray-500 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none text-gray-900 placeholder-gray-500 transition-all duration-200"
                     placeholder="Enter your password"
                     {...register("password", { required: true })}
                   />

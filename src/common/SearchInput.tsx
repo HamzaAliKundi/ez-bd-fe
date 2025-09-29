@@ -55,7 +55,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
           placeholder={placeholder}
           disabled={disabled}
           autoFocus={autoFocus}
-          className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors disabled:bg-gray-50 disabled:cursor-not-allowed"
+          className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none transition-colors disabled:bg-gray-50 disabled:cursor-not-allowed"
         />
         {inputValue && (
           <button

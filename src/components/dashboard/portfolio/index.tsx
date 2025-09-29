@@ -161,12 +161,12 @@ const Portfolio = () => {
           <PortfolioSkeleton count={6} />
         ) : (
           <>
-            {/* Portfolio Grid */}
+        {/* Portfolio Grid */}
             {portfolioData?.data.length === 0 ? (
-              <div className="text-center py-16">
-                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <FiFolder className="w-12 h-12 text-gray-400" />
-                </div>
+          <div className="text-center py-16">
+            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <FiFolder className="w-12 h-12 text-gray-400" />
+            </div>
                 {debouncedSearchTerm ? (
                   <>
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">No results found</h3>
@@ -183,28 +183,28 @@ const Portfolio = () => {
                   </>
                 ) : (
                   <>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">No projects yet</h3>
-                    <p className="text-gray-600 mb-6">Start building your portfolio by adding your first project</p>
-                    <button
-                      onClick={() => setIsModalOpen(true)}
-                      className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center gap-2"
-                    >
-                      <FiPlus className="w-5 h-5" />
-                      Add Your First Project
-                    </button>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No projects yet</h3>
+            <p className="text-gray-600 mb-6">Start building your portfolio by adding your first project</p>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center gap-2"
+            >
+              <FiPlus className="w-5 h-5" />
+              Add Your First Project
+            </button>
                   </>
                 )}
-              </div>
-            ) : (
+          </div>
+        ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {portfolioData?.data.map((item) => (
-                    <div
+              <div
                       key={item._id}
                       className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 hover:border-teal-200 transform hover:-translate-y-1 group"
-                    >
+              >
                       {/* Action Buttons */}
-                      <div className="flex items-start justify-between mb-4">
+                <div className="flex items-start justify-between mb-4">
                         <h3 className="text-xl font-semibold text-gray-900 flex-1 mr-2" title={item.title}>
                           {item.title.length > 30 ? `${item.title.substring(0, 30)}...` : item.title}
                         </h3>
@@ -224,48 +224,48 @@ const Portfolio = () => {
                           >
                             <FiTrash2 className="w-4 h-4" />
                           </button>
-                          {item.githubLink && (
-                            <a
-                              href={item.githubLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                  {item.githubLink && (
+                    <a
+                      href={item.githubLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
                               className="text-gray-400 hover:text-teal-600 transition-colors p-1"
                               title="View on GitHub"
-                            >
+                    >
                               <FiGithub className="w-4 h-4" />
-                            </a>
-                          )}
+                    </a>
+                  )}
                         </div>
-                      </div>
-                      
+                </div>
+                
                       <p className="text-gray-600 mb-4" title={item.description}>
                         {item.description.length > 30 ? `${item.description.substring(0, 30)}...` : item.description}
                       </p>
-                      
-                      {item.techStack.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {item.techStack.map((tech, index) => (
-                            <span
-                              key={index}
-                              className="bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-sm font-medium"
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                      
-                      {item.githubLink && (
-                        <a
-                          href={item.githubLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-medium transition-colors"
-                        >
-                          <FiExternalLink className="w-4 h-4" />
-                          View Project
-                        </a>
-                      )}
+                
+                {item.techStack.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {item.techStack.map((tech, index) => (
+                      <span
+                        key={index}
+                        className="bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-sm font-medium"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                
+                {item.githubLink && (
+                  <a
+                    href={item.githubLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-medium transition-colors"
+                  >
+                    <FiExternalLink className="w-4 h-4" />
+                    View Project
+                  </a>
+                )}
                       
                       <div className="text-xs text-gray-400 mt-4">
                         Created: {new Date(item.createdAt).toLocaleDateString('en-US', { 
@@ -274,9 +274,9 @@ const Portfolio = () => {
                           year: 'numeric' 
                         })}
                       </div>
-                    </div>
-                  ))}
-                </div>
+              </div>
+            ))}
+          </div>
 
                 {/* Pagination */}
                 {portfolioData && portfolioData.totalPages > 1 && (
@@ -287,8 +287,8 @@ const Portfolio = () => {
                       onPageChange={handlePageChange}
                       isLoading={isLoading}
                       totalItems={portfolioData.totalCount}
-                    />
-                  </div>
+                  />
+                </div>
                 )}
               </>
             )}
@@ -297,14 +297,7 @@ const Portfolio = () => {
 
         {/* Special Instructions - Only show when there are projects */}
         {!isLoading && portfolioData && portfolioData.data.length > 0 && (
-          <PortfolioInstructions
-            initialInstructions=""
-            onSave={(instructions) => {
-              console.log('Saving instructions:', instructions)
-              // TODO: Implement API call to save instructions
-            }}
-            isLoading={false}
-          />
+          <PortfolioInstructions />
         )}
 
         {/* Add/Edit Portfolio Modal */}
